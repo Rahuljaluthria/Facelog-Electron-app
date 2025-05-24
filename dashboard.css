@@ -1,0 +1,225 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .container {
+    display: flex;
+    height: 100%;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 80px;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* 👈 Push top & bottom apart */
+    padding: 20px 0;
+  }
+  
+  
+  
+  .sidebar .logo {
+    width: 50px;
+    margin-bottom: 20px;
+  }
+  
+ .nav-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+  align-items: center;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  color: #0078d7;
+}
+
+  
+  /* Main content */
+  .main-content {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: #0a0a0a;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile {
+    background-color: #222;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+  
+  /* Content grid */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 250px 250px;
+    gap: 20px;
+  }
+  
+  .clock-box,
+.status-box,
+.calendar-box {
+  background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .clock-box img {
+    width: 60px;
+    margin-bottom: 20px;
+  }
+  
+  #scanBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  #scanBtn:hover {
+    background-color: #005fa3;
+  }
+  
+  .status-box img {
+    margin-top: 15px;
+    width: 60px;
+  }
+  /* Style for the clock text */
+  .clock-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: white !important;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .clock-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .settings-panel {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: #1a1a1a;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    display: none;
+  }
+  
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .toggle-container input {
+    display: none;
+  }
+  
+  .slider {
+    width: 40px;
+    height: 20px;
+    background-color: #888;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    background-color: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+  }
+  
+  input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+  
+  input:checked + .slider {
+    background-color: #0078d7;
+  }
+  body.dark-theme {
+    background-color: #0a0a0a;
+    color: white;
+  }
+  
+  body.dark-theme .main-content,
+  body.dark-theme .sidebar,
+  body.dark-theme .clock-box,
+  body.dark-theme .status-box,
+  body.dark-theme .calendar-box,
+  body.dark-theme .settings-panel {
+    background-color: #1a1a1a;
+    color: white;
+  }
+  
+  body.dark-theme .profile {
+    background-color: #222;
+  }
+    
+
+  
+  
+

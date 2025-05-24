@@ -1,0 +1,15 @@
+{
+  "name": "facelog",
+  "version": "1.0.0",
+  "description": "FaceLog desktop app for attendance with deepfake detection",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^29.4.6"
+  },
+  "dependencies": {
+    "python-shell": "^5.0.0"
+  }
+}

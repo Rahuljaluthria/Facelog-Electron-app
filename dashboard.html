@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FaceLog Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://unpkg.com/lucide@latest"></script> <!-- Lucide CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/js-year-calendar@latest/dist/js-year-calendar.min.css" />
+
+  <style>
+    #clock {
+      font-size: 2.5rem;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Dark Mode Styles */
+    body.dark-theme {
+      background-color: #0a0a0a;
+      color: white;
+    }
+
+    body.dark-theme .main-content,
+    body.dark-theme .sidebar,
+    body.dark-theme .clock-box,
+    body.dark-theme .status-box,
+    body.dark-theme .calendar-box,
+    body.dark-theme .settings-panel {
+      background-color: #1a1a1a;
+      color: white;
+    }
+
+    body.dark-theme .profile {
+      background-color: #222;
+    }
+
+    /* Settings Toggle Styles */
+    .settings-panel {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      background-color: #1a1a1a;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+      display: none;
+      z-index: 100;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-weight: 500;
+    }
+
+    .toggle-container input {
+      display: none;
+    }
+
+    .slider {
+      width: 40px;
+      height: 20px;
+      background-color: #888;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      background-color: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: 0.3s;
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    input:checked + .slider {
+      background-color: #0078d7;
+    }
+
+    .label-text {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <img src="../assets/Facelog logo.png" alt="Logo" class="logo" />
+
+      <!-- Top nav icons -->
+      <div class="nav-icons top-icons">
+        <i data-lucide="home" class="icon" title="Home"></i>
+        <i data-lucide="user" class="icon" title="Profile"></i>
+        <i data-lucide="bar-chart-2" class="icon" title="Analytics"></i>
+        <i data-lucide="message-circle" class="icon" title="Messages"></i>
+      </div>
+
+      <!-- Bottom nav icons -->
+      <div class="nav-icons bottom-icons">
+        <i data-lucide="settings" class="icon" title="Settings" id="settingsIcon"></i>
+        <i data-lucide="help-circle" class="icon" title="About"></i>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Face Log</h1>
+        <div class="profile">
+          <span id="usernameDisplay">Welcome</span>
+          <img src="https://via.placeholder.com/35" class="profile-pic" />
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="card clock-box">
+          <div id="clock" class="clock-text">--:--:--</div>
+          <button id="scanBtn">Face Scan</button>
+          <div id="statusMessage"></div>
+          
+        </div>
+        
+
+        <div class="status-box">
+          <h2>Attendance Marked</h2>
+          <img src="https://img.icons8.com/color/96/checked.png" alt="Check" />
+        </div>
+
+        <div class="calendar-box">
+          <h3>Calendar</h3>
+          <div id="calendar" style="width: 100%;"></div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <label class="toggle-container">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="slider"></span>
+      <span class="label-text">Dark Mode</span>
+    </label>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Load user data
+    const username = localStorage.getItem("username");
+    if (username) {
+      document.getElementById("usernameDisplay").textContent = `Welcome, ${username}`;
+      const imagePath = `face/${username}.jpg`;
+      const profilePic = document.querySelector(".profile-pic");
+      profilePic.src = imagePath;
+
+      profilePic.onerror = () => {
+        console.error("Image not found:", imagePath);
+        profilePic.src = "https://via.placeholder.com/35";
+      };
+    } else {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("scanBtn").addEventListener("click", () => {
+  if (window.electronAPI && window.electronAPI.runFaceScan) {
+    window.electronAPI.runFaceScan();
+  } else {
+    console.error("Electron API not available!");
+  }
+});
+    // Live Clock Script
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString();
+      document.getElementById("clock").textContent = time;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Toggle Settings Panel
+    const settingsIcon = document.getElementById("settingsIcon");
+    const settingsPanel = document.getElementById("settingsPanel");
+
+    settingsIcon.addEventListener("click", () => {
+      settingsPanel.style.display = settingsPanel.style.display === "block" ? "none" : "block";
+    });
+
+    // Dark Mode Logic
+    const darkModeToggle = document.getElementById("darkModeToggle");
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-theme");
+      darkModeToggle.checked = true;
+    }
+
+    darkModeToggle.addEventListener("change", () => {
+      if (darkModeToggle.checked) {
+        document.body.classList.add("dark-theme");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.body.classList.remove("dark-theme");
+        localStorage.setItem("theme", "light");
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/js-year-calendar@latest/dist/js-year-calendar.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const today = new Date();
+  
+      new Calendar('#calendar', {
+        style: 'background',
+        enableContextMenu: false,
+        enableRangeSelection: false,
+        dataSource: [
+          {
+            startDate: today,
+            endDate: today,
+            color: '#0078d7', // Highlight color for today
+            name: 'Today'
+          }
+        ],
+        clickDay: function(e) {
+          alert("Selected date: " + e.date.toDateString());
+        }
+      });
+    });
+  </script>
+  
+  
+</body>
+</html>
